@@ -118,7 +118,15 @@ io.on("connection", (socket) => {
 // Express v5-safe catch-all (no "*")
 app.all("/{*any}", (_req, res) => res.status(404).json({ error: "Not found" }));
 
-server.listen(PORT, () => {
-  console.log(`Server http://localhost:${PORT}`);
-  console.log(`Allowed client origin: ${CLIENT_ORIGIN}`);
-});
+// server.listen(PORT, () => {
+//   console.log(`Server http://localhost:${PORT}`);
+//   console.log(`Allowed client origin: ${CLIENT_ORIGIN}`);
+// });
+
+if (process.env.VERCEL) {
+  module.exports = app; // for Vercel serverless function
+} else {
+  server.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+  });
+}
